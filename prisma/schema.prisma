@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id         String    @id @default(uuid())
+  name       String
+  email      String    @unique
+  password   String
+  role       String
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+  Comment    Comment[]
+  Post       Post[]
+
+  @@map("users")
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now())
+  Post        Post[]
+
+  @@map("categories")
+}
+
+model Post {
+  id          String    @id @default(uuid())
+  title       String
+  description String
+  image_url   String?
+  num_likes   Int?      @default(0)
+  num_views   Int?      @default(0)
+  user_id     String
+  category_id String
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @default(now())
+  Comment     Comment[]
+  category    Category  @relation(fields: [category_id], references: [id])
+  user        User      @relation(fields: [user_id], references: [id])
+
+  @@map("posts")
+}
+
+model Comment {
+  id          String   @id @default(uuid())
+  description String
+  user_id     String
+  post_id     String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now())
+  user        User     @relation(fields: [user_id], references: [id])
+  post        Post     @relation(fields: [post_id], references: [id])
+
+  @@map("comments")
+}
