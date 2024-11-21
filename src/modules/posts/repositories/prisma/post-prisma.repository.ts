@@ -54,6 +54,34 @@ export class PostPrismaRepository implements IPostRepository {
       where: query,
       take: limit,
       skip: (page - 1) * limit,
+        select: {
+          category: {
+            select : {
+              id : true,
+              name : true,
+            }
+          },
+ 
+        user : {
+            select: {
+              id: true,
+              name: true,
+            }
+        },
+        id: true,
+        created_at : true,
+        title : true,
+        description : true,
+        Comment : true,
+        user_id  : true,
+        updated_at : true,
+        category_id : true,
+        num_likes : true,
+        image_url : true,
+       _count : true,
+       num_views : true,
+      }
+
     });
 
     return {
